@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import TypeAlias
 import enum
+from tabulate import tabulate
 
 
 Money: TypeAlias = float
@@ -37,7 +38,14 @@ class Account:
         if amount > self.balance:
             raise ValueError
         self.balance -= amount
+        event = AccountEvent(date=datetime.now().date(), amount=-amount, balance=self.balance)
+        self.history.add_event(event=event)
 
+    def print_history(self):
+        event_lists = []
+        for event in self.history.events_history:
+            event_lists.append([event.date, event.amount, event.balance])
+        print(tabulate(event_lists, headers=["Date", "Amount", "Balance"]))
 
 
 

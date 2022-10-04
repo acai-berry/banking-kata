@@ -1,11 +1,12 @@
-from banking import Account
+from banking import Account, AccountHistory
 import pytest
 from datetime import datetime
 
 
 def test_should_make_deposit():
     #given
-    account = Account()
+    history = AccountHistory()
+    account = Account(history)
     amount = 50
     #when
     account.deposit(amount)
@@ -14,21 +15,23 @@ def test_should_make_deposit():
 
 def test_account_provides_operations_history():
     #given
-    account = Account()
+    given_history = AccountHistory()
+    account = Account(given_history)
     #when
     deposit_amount = 50
     account.deposit(deposit_amount)
     #then
-    history = account.history
-    assert history[0] == datetime.datetime.now().date()
-    assert history[1] == deposit_amount
-    assert history[2] ==
+    events = account.history.events_history
+    assert events[0].date == datetime.now().date()
+    assert events[0].amount == deposit_amount
+    assert events[0].balance == deposit_amount
+    assert len(events) == 1
     
 
-
-def test_should_make_withdraw_correct_amount():
+def test_should_withdraw_correct_amount():
     #given
-    account = Account()
+    history = AccountHistory()
+    account = Account(history)
     amount = 50
     account.deposit(amount)
     #when
@@ -38,9 +41,10 @@ def test_should_make_withdraw_correct_amount():
     #then
     assert account.balance == expected_value
 
-def test_should_make_withdraw_incorrect_amount():
+def test_should_not_withdraw_incorrect_amount():
     #given
-    account = Account()
+    history = AccountHistory()
+    account = Account(history)
     amount = 50
     account.deposit(amount)
     #when
