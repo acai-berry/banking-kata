@@ -18,7 +18,9 @@ class AccountEvent:
     balance: Money
 
     def __iter__(self):
-        yield from self.events_history
+        yield self.date
+        yield self.amount
+        yield self.balance
 
 @dataclass
 class AccountHistory:
@@ -27,9 +29,6 @@ class AccountHistory:
     def add_event(self, event: AccountEvent):
         self.events_history.append(event)
 
-    #napisac metode iter, zeby dalo sie iterowac 
-    def __iter__(self):
-        yield from self.events_history
 
 @dataclass
 class Account:
@@ -49,10 +48,6 @@ class Account:
         self.history.add_event(event=event)
 
     def print_history(self):
-        # event_lists = []
-        # for event in self.history.events_history:
-        #     event_lists.append([event.date, event.amount, event.balance])
-        # print(tabulate(event_lists, headers=["Date", "Amount", "Balance"]))
         print(tabulate(self.history.events_history, headers=["Date", "Amount", "Balance"]))
 
 
